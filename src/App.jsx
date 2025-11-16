@@ -41,13 +41,26 @@ function App() {
       {/* Central AI Entity */}
       <div className="ai-container">
         <div className={`ai-orb ${aiState}`}>
-          {/* Main glowing orb */}
-          <div className="orb-core"></div>
+          {/* Main glowing 3D orb */}
+          <div className="orb-core">
+            <div className="orb-surface"></div>
+            <div className="orb-highlight"></div>
+          </div>
 
-          {/* Simple rings based on state */}
+          {/* Wave ripples around the orb */}
+          <div className="wave wave-1"></div>
+          <div className="wave wave-2"></div>
+          <div className="wave wave-3"></div>
+
+          {/* Rotating rings */}
           <div className="ring ring-1"></div>
           <div className="ring ring-2"></div>
           <div className="ring ring-3"></div>
+
+          {/* Orbiting dots */}
+          <div className="orbit-dot dot-1"></div>
+          <div className="orbit-dot dot-2"></div>
+          <div className="orbit-dot dot-3"></div>
         </div>
 
         {/* State indicator */}

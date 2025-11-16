@@ -53,6 +53,7 @@ body {
 
 /* Core Orb */
 .orb-core {
+  position: relative;
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -66,12 +67,154 @@ body {
   z-index: 10;
 }
 
+/* 3D Surface Layer */
+.orb-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.1) 30%,
+    transparent 60%
+  );
+  opacity: 0.8;
+}
+
+/* 3D Highlight */
+.orb-highlight {
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.3) 40%,
+    transparent 70%
+  );
+  filter: blur(10px);
+  animation: highlight-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes highlight-shimmer {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
 @keyframes orb-pulse {
   0%, 100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.05);
+  }
+}
+
+/* Wave Ripples */
+.wave {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(96, 165, 250, 0.3);
+  animation: wave-expand 3s ease-out infinite;
+  opacity: 0;
+}
+
+.wave-1 {
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  width: 150px;
+  height: 150px;
+  animation-delay: 1s;
+}
+
+.wave-3 {
+  width: 150px;
+  height: 150px;
+  animation-delay: 2s;
+}
+
+@keyframes wave-expand {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Orbiting Dots */
+.orbit-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.8);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+}
+
+.dot-1 {
+  top: 50%;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+  animation: orbit-1 8s linear infinite;
+}
+
+.dot-2 {
+  top: 50%;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+  animation: orbit-2 10s linear infinite;
+}
+
+.dot-3 {
+  top: 50%;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+  animation: orbit-3 12s linear infinite;
+}
+
+@keyframes orbit-1 {
+  from {
+    transform: rotate(0deg) translateX(100px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(100px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-2 {
+  from {
+    transform: rotate(120deg) translateX(130px) rotate(-120deg);
+  }
+  to {
+    transform: rotate(480deg) translateX(130px) rotate(-480deg);
+  }
+}
+
+@keyframes orbit-3 {
+  from {
+    transform: rotate(240deg) translateX(160px) rotate(-240deg);
+  }
+  to {
+    transform: rotate(600deg) translateX(160px) rotate(-600deg);
   }
 }
 
@@ -123,6 +266,15 @@ body {
   box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
 }
 
+.ai-orb.idle .wave {
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.ai-orb.idle .orbit-dot {
+  background: rgba(96, 165, 250, 0.8);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+}
+
 /* LISTENING State */
 .ai-orb.listening .orb-core {
   background: radial-gradient(circle at 40% 40%, #34d399, #10b981, #065f46);
@@ -136,6 +288,15 @@ body {
   border-color: rgba(52, 211, 153, 0.6);
   box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
   animation-duration: 8s, 12s, 16s;
+}
+
+.ai-orb.listening .wave {
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.ai-orb.listening .orbit-dot {
+  background: rgba(52, 211, 153, 0.9);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
 }
 
 @keyframes orb-pulse-fast {
@@ -162,6 +323,15 @@ body {
   animation-duration: 6s, 9s, 12s;
 }
 
+.ai-orb.speaking .wave {
+  border-color: rgba(244, 114, 182, 0.4);
+}
+
+.ai-orb.speaking .orbit-dot {
+  background: rgba(244, 114, 182, 0.9);
+  box-shadow: 0 0 12px rgba(244, 114, 182, 0.9);
+}
+
 @keyframes orb-pulse-rapid {
   0%, 100% {
     transform: scale(1);
@@ -183,6 +353,15 @@ body {
   border-color: rgba(167, 139, 250, 0.6);
   box-shadow: 0 0 30px rgba(167, 139, 250, 0.5);
   animation-duration: 5s, 7s, 9s;
+}
+
+.ai-orb.thinking .wave {
+  border-color: rgba(167, 139, 250, 0.4);
+}
+
+.ai-orb.thinking .orbit-dot {
+  background: rgba(167, 139, 250, 0.9);
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.9);
 }
 
 /* State Indicator */
