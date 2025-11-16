@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const [messages, setMessages] = useState([])
   const [inputText, setInputText] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
+  const messagesEndRef = useRef(null)
 
   // Animate time for smooth transitions
   useEffect(() => {
@@ -16,6 +17,11 @@ function App() {
     }, 50)
     return () => clearInterval(interval)
   }, [])
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   const stateConfig = {
     idle: { label: 'Resting', color: '#60a5fa', description: 'AI is in idle mode' },
@@ -195,14 +201,14 @@ function App() {
           </div>
         </div>
 
-        {/* Chat toggle button */}
-        <button
-          className="chat-toggle-btn"
-          onClick={() => setChatOpen(!chatOpen)}
-        >
-          {chatOpen ? 'Close Chat' : 'Open Chat'}
-        </button>
       </div>
+
+      {/* Floating Chat Toggle Button */}
+      <button
+        className={`chat-toggle-btn ${chatOpen ? 'open' : ''}`}
+        onClick={() => setChatOpen(!chatOpen)}
+        aria-label={chatOpen ? 'Close chat' : 'Open chat'}
+      />
 
       {/* Chat Interface */}
       {chatOpen && (
@@ -216,11 +222,14 @@ function App() {
             {messages.length === 0 ? (
               <div className="empty-chat">Start a conversation...</div>
             ) : (
-              messages.map((msg, idx) => (
-                <div key={idx} className={`message ${msg.role}`}>
-                  <div className="message-content">{msg.content}</div>
-                </div>
-              ))
+              <>
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`message ${msg.role}`}>
+                    <div className="message-content">{msg.content}</div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </>
             )}
           </div>
 

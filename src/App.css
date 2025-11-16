@@ -495,57 +495,91 @@ body {
   }
 }
 
-/* Chat Toggle Button */
+/* Chat Toggle Button - Floating */
 .chat-toggle-btn {
-  margin-top: 2rem;
-  padding: 0.85rem 2rem;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(139, 92, 246, 0.2));
-  border: 2px solid rgba(96, 165, 250, 0.4);
-  border-radius: 25px;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 65px;
+  height: 65px;
+  padding: 0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.9), rgba(139, 92, 246, 0.9));
+  border: 2px solid rgba(96, 165, 250, 0.6);
+  border-radius: 50%;
   color: white;
-  font-size: 1rem;
+  font-size: 1.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: 'Inter', sans-serif;
   backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.4), 0 0 40px rgba(96, 165, 250, 0.2);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-toggle-btn:hover {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(139, 92, 246, 0.3));
-  border-color: rgba(96, 165, 250, 0.6);
-  box-shadow: 0 0 30px rgba(96, 165, 250, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(139, 92, 246, 1));
+  border-color: rgba(96, 165, 250, 0.8);
+  box-shadow: 0 6px 30px rgba(96, 165, 250, 0.6), 0 0 50px rgba(96, 165, 250, 0.3);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.chat-toggle-btn::before {
+  content: '💬';
+}
+
+.chat-toggle-btn.open::before {
+  content: '✕';
+  font-size: 1.5rem;
 }
 
 /* Chat Container */
 .chat-container {
   position: fixed;
   right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 6rem;
   width: 400px;
+  max-width: calc(100vw - 4rem);
   height: 600px;
-  background: rgba(15, 23, 42, 0.95);
+  max-height: calc(100vh - 10rem);
+  background: rgba(15, 23, 42, 0.98);
   border: 2px solid rgba(96, 165, 250, 0.3);
   border-radius: 20px;
   backdrop-filter: blur(20px);
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(96, 165, 250, 0.2);
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease-out;
-  z-index: 100;
+  animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 998;
+  transform-origin: bottom right;
 }
 
-@keyframes slideIn {
+@keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(50px);
+    transform: translateY(30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chat-container.closing {
+  animation: slideOutDown 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
   }
 }
 
@@ -761,11 +795,80 @@ body {
   .chat-container {
     right: 1rem;
     left: 1rem;
+    bottom: 5rem;
     width: auto;
-    height: 500px;
+    height: 70vh;
+    max-height: 550px;
+    border-radius: 15px;
+  }
+
+  .chat-header {
+    padding: 1rem;
+  }
+
+  .chat-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .chat-messages {
+    padding: 1rem;
   }
 
   .message-content {
     max-width: 85%;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .chat-input-container {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .voice-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .chat-input {
+    font-size: 0.9rem;
+  }
+
+  .send-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .chat-toggle-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.6rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .chat-container {
+    right: 0.5rem;
+    left: 0.5rem;
+    bottom: 4.5rem;
+    height: 75vh;
+    max-height: 500px;
+  }
+
+  .chat-toggle-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 55px;
+    height: 55px;
+    font-size: 1.5rem;
+  }
+
+  .voice-btn {
+    width: 38px;
+    height: 38px;
   }
 }
