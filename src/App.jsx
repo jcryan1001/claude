@@ -1,175 +1,168 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [particles, setParticles] = useState([])
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [isHovering, setIsHovering] = useState(false)
-  const canvasRef = useRef(null)
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 })
+  const [time, setTime] = useState(0)
+  const [selectedPlanet, setSelectedPlanet] = useState(null)
 
-  // Create particles that follow the mouse
+  // Track mouse for parallax effect
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY })
-
-      // Create new particle
-      const newParticle = {
-        id: Date.now() + Math.random(),
-        x: e.clientX,
-        y: e.clientY,
-        size: Math.random() * 5 + 2,
-        speedX: (Math.random() - 0.5) * 2,
-        speedY: (Math.random() - 0.5) * 2,
-        life: 1
-      }
-
-      setParticles(prev => [...prev.slice(-50), newParticle])
+      const x = (e.clientX / window.innerWidth) * 100
+      const y = (e.clientY / window.innerHeight) * 100
+      setMousePos({ x, y })
     }
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  // Animate particles
+  // Animate time for orbiting elements
   useEffect(() => {
     const interval = setInterval(() => {
-      setParticles(prev =>
-        prev
-          .map(p => ({
-            ...p,
-            x: p.x + p.speedX,
-            y: p.y + p.speedY,
-            life: p.life - 0.02
-          }))
-          .filter(p => p.life > 0)
-      )
-    }, 30)
-
+      setTime(prev => (prev + 0.5) % 360)
+    }, 50)
     return () => clearInterval(interval)
   }, [])
 
-  const handleCardClick = () => {
-    // Create explosion of particles
-    const explosionParticles = Array.from({ length: 30 }, () => ({
-      id: Date.now() + Math.random(),
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-      size: Math.random() * 8 + 3,
-      speedX: (Math.random() - 0.5) * 15,
-      speedY: (Math.random() - 0.5) * 15,
-      life: 1
-    }))
-
-    setParticles(prev => [...prev, ...explosionParticles])
-  }
+  const planets = [
+    { name: 'Mercury', color: '#8C7853', size: 40, orbitSpeed: 1.2, distance: 80 },
+    { name: 'Venus', color: '#FFC649', size: 60, orbitSpeed: 0.8, distance: 120 },
+    { name: 'Earth', color: '#4A90E2', size: 65, orbitSpeed: 0.6, distance: 160 },
+    { name: 'Mars', color: '#E27B58', size: 50, orbitSpeed: 0.4, distance: 200 }
+  ]
 
   return (
-    <div className="App">
-      {/* Retro grid background */}
-      <div className="retro-grid"></div>
-      <div className="retro-sun"></div>
+    <div className="App" style={{
+      transform: `translate(${(mousePos.x - 50) * 0.02}px, ${(mousePos.y - 50) * 0.02}px)`
+    }}>
+      {/* Animated Starfield */}
+      <div className="stars-layer stars-small"></div>
+      <div className="stars-layer stars-medium"></div>
+      <div className="stars-layer stars-large"></div>
 
-      {/* CRT scanlines effect */}
-      <div className="scanlines"></div>
-      <div className="vhs-effect"></div>
+      {/* Nebula clouds */}
+      <div className="nebula nebula-1"></div>
+      <div className="nebula nebula-2"></div>
+      <div className="nebula nebula-3"></div>
 
-      {/* Neon particles */}
-      <div className="particles">
-        {particles.map(particle => (
-          <div
-            key={particle.id}
-            className="particle neon-particle"
-            style={{
-              left: particle.x,
-              top: particle.y,
-              width: particle.size,
-              height: particle.size,
-              opacity: particle.life,
-              boxShadow: `0 0 ${particle.size * 3}px #ff00ff, 0 0 ${particle.size * 5}px #00ffff`
-            }}
-          />
-        ))}
+      {/* Aurora effect */}
+      <div className="aurora"></div>
+
+      {/* Central Sun */}
+      <div className="sun">
+        <div className="sun-core"></div>
+        <div className="sun-corona"></div>
       </div>
 
-      {/* Neon cursor glow */}
-      <div
-        className="cursor-glow"
-        style={{
-          left: mousePos.x,
-          top: mousePos.y
-        }}
-      />
+      {/* Orbital system */}
+      <div className="solar-system">
+        {planets.map((planet, index) => {
+          const angle = time * planet.orbitSpeed + (index * 90)
+          const radian = (angle * Math.PI) / 180
+          const x = Math.cos(radian) * planet.distance
+          const y = Math.sin(radian) * planet.distance * 0.3
 
-      <div className="content">
-        {/* Retro header with VHS glitch */}
-        <div className="retro-header">
-          <div className="glitch-text">
-            <span className="glitch-layer">R E T R O</span>
-            <span className="glitch-layer">R E T R O</span>
-            <span className="glitch-layer">R E T R O</span>
+          return (
+            <div key={planet.name}>
+              {/* Orbit ring */}
+              <div
+                className="orbit-ring"
+                style={{
+                  width: planet.distance * 2,
+                  height: planet.distance * 2 * 0.3,
+                }}
+              ></div>
+
+              {/* Planet */}
+              <div
+                className={`planet ${selectedPlanet === planet.name ? 'planet-selected' : ''}`}
+                style={{
+                  width: planet.size,
+                  height: planet.size,
+                  background: `radial-gradient(circle at 30% 30%, ${planet.color}, ${planet.color}dd)`,
+                  left: `calc(50% + ${x}px)`,
+                  top: `calc(50% + ${y}px)`,
+                  boxShadow: `0 0 ${planet.size}px ${planet.color}88, inset -${planet.size/4}px -${planet.size/4}px ${planet.size/2}px rgba(0,0,0,0.5)`
+                }}
+                onClick={() => setSelectedPlanet(planet.name)}
+              >
+                <div className="planet-glow" style={{ background: planet.color }}></div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Content */}
+      <div className="cosmic-content">
+        <h1 className="cosmic-title">
+          <span className="title-word">COSMIC</span>
+          <span className="title-word">EXPLORER</span>
+        </h1>
+
+        <p className="cosmic-subtitle">Journey Through the Digital Universe</p>
+
+        {/* Orbital cards */}
+        <div className="orbital-cards">
+          <div className="cosmic-card" data-tilt="left">
+            <div className="card-shine"></div>
+            <div className="card-planet-icon">🌍</div>
+            <h3>Discover Worlds</h3>
+            <p>Explore infinite planetary systems</p>
+            <div className="card-stats">
+              <span>4 Planets</span>
+              <span>∞ Stars</span>
+            </div>
           </div>
-          <div className="year-badge">[ 1 9 8 7 ]</div>
+
+          <div className="cosmic-card" data-tilt="center">
+            <div className="card-shine"></div>
+            <div className="card-planet-icon">🌌</div>
+            <h3>Navigate Space</h3>
+            <p>Chart your course through nebulas</p>
+            <div className="card-stats">
+              <span>3D Orbits</span>
+              <span>Real-time</span>
+            </div>
+          </div>
+
+          <div className="cosmic-card" data-tilt="right">
+            <div className="card-shine"></div>
+            <div className="card-planet-icon">⭐</div>
+            <h3>Pure CSS Magic</h3>
+            <p>No libraries, just imagination</p>
+            <div className="card-stats">
+              <span>60 FPS</span>
+              <span>Responsive</span>
+            </div>
+          </div>
         </div>
 
-        <p className="subtitle terminal-text">&gt;&gt; WELCOME TO THE DIGITAL FUTURE &lt;&lt;</p>
+        {/* Info panel */}
+        {selectedPlanet && (
+          <div className="planet-info">
+            <h4>{selectedPlanet}</h4>
+            <p>Selected Planet</p>
+            <button onClick={() => setSelectedPlanet(null)}>Close</button>
+          </div>
+        )}
 
-        {/* Retro arcade cards */}
-        <div className="cards-container">
-          <div
-            className="retro-card"
-            onClick={handleCardClick}
-          >
-            <div className="card-corner tl"></div>
-            <div className="card-corner tr"></div>
-            <div className="card-corner bl"></div>
-            <div className="card-corner br"></div>
-            <div className="card-icon retro-icon">▲</div>
-            <h3>ARCADE MODE</h3>
-            <p>PRESS TO ACTIVATE</p>
-            <div className="blink-text">█ READY █</div>
+        {/* Coordinates */}
+        <div className="space-coords">
+          <div className="coord-item">
+            <span className="coord-label">X-Axis</span>
+            <span className="coord-value">{Math.round(mousePos.x)}°</span>
           </div>
-
-          <div className="retro-card neon-pulse">
-            <div className="card-corner tl"></div>
-            <div className="card-corner tr"></div>
-            <div className="card-corner bl"></div>
-            <div className="card-corner br"></div>
-            <div className="card-icon retro-icon">♦</div>
-            <h3>NEON TRAILS</h3>
-            <p>MOVE CURSOR</p>
-            <div className="blink-text">█ ACTIVE █</div>
+          <div className="coord-item">
+            <span className="coord-label">Y-Axis</span>
+            <span className="coord-value">{Math.round(mousePos.y)}°</span>
           </div>
-
-          <div className="retro-card">
-            <div className="card-corner tl"></div>
-            <div className="card-corner tr"></div>
-            <div className="card-corner bl"></div>
-            <div className="card-corner br"></div>
-            <div className="card-icon retro-icon">◆</div>
-            <h3>SYNTHWAVE</h3>
-            <p>PURE VIBES</p>
-            <div className="blink-text">█ ONLINE █</div>
+          <div className="coord-item">
+            <span className="coord-label">Rotation</span>
+            <span className="coord-value">{Math.round(time)}°</span>
           </div>
-        </div>
-
-        {/* Retro terminal stats */}
-        <div className="terminal-stats">
-          <div className="stat-row">
-            <span className="stat-label-retro">[PARTICLES]</span>
-            <span className="stat-value-retro">{particles.length.toString().padStart(3, '0')}</span>
-          </div>
-          <div className="stat-row">
-            <span className="stat-label-retro">[COORD-X]</span>
-            <span className="stat-value-retro">{Math.round(mousePos.x).toString().padStart(4, '0')}</span>
-          </div>
-          <div className="stat-row">
-            <span className="stat-label-retro">[COORD-Y]</span>
-            <span className="stat-value-retro">{Math.round(mousePos.y).toString().padStart(4, '0')}</span>
-          </div>
-        </div>
-
-        <div className="footer-text">
-          ◢◤◢◤◢◤ SYSTEM OPERATIONAL ◢◤◢◤◢◤
         </div>
       </div>
     </div>
