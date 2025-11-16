@@ -2,166 +2,143 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 })
+  const [aiState, setAiState] = useState('idle') // idle, listening, speaking, thinking
   const [time, setTime] = useState(0)
-  const [selectedPlanet, setSelectedPlanet] = useState(null)
 
-  // Track mouse for parallax effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth) * 100
-      const y = (e.clientY / window.innerHeight) * 100
-      setMousePos({ x, y })
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
-  // Animate time for orbiting elements
+  // Animate time for smooth transitions
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(prev => (prev + 0.5) % 360)
+      setTime(prev => prev + 1)
     }, 50)
     return () => clearInterval(interval)
   }, [])
 
-  const planets = [
-    { name: 'Mercury', color: '#8C7853', size: 40, orbitSpeed: 1.2, distance: 80 },
-    { name: 'Venus', color: '#FFC649', size: 60, orbitSpeed: 0.8, distance: 120 },
-    { name: 'Earth', color: '#4A90E2', size: 65, orbitSpeed: 0.6, distance: 160 },
-    { name: 'Mars', color: '#E27B58', size: 50, orbitSpeed: 0.4, distance: 200 }
-  ]
+  // Auto-cycle through states for demo (optional - can remove)
+  useEffect(() => {
+    const states = ['idle', 'listening', 'speaking', 'thinking']
+    let currentIndex = 0
+
+    const cycleInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % states.length
+      setAiState(states[currentIndex])
+    }, 5000) // Change state every 5 seconds
+
+    return () => clearInterval(cycleInterval)
+  }, [])
+
+  const stateConfig = {
+    idle: { label: 'Resting', color: '#60a5fa', description: 'AI is in idle mode' },
+    listening: { label: 'Listening', color: '#34d399', description: 'Actively receiving input' },
+    speaking: { label: 'Speaking', color: '#f472b6', description: 'Generating response' },
+    thinking: { label: 'Thinking', color: '#a78bfa', description: 'Processing information' }
+  }
 
   return (
-    <div className="App" style={{
-      transform: `translate(${(mousePos.x - 50) * 0.02}px, ${(mousePos.y - 50) * 0.02}px)`
-    }}>
-      {/* Animated Starfield */}
-      <div className="stars-layer stars-small"></div>
-      <div className="stars-layer stars-medium"></div>
-      <div className="stars-layer stars-large"></div>
+    <div className="App">
+      {/* Subtle background gradient */}
+      <div className="ai-background"></div>
 
-      {/* Nebula clouds */}
-      <div className="nebula nebula-1"></div>
-      <div className="nebula nebula-2"></div>
-      <div className="nebula nebula-3"></div>
+      {/* Central AI Entity */}
+      <div className="ai-container">
+        <div className={`ai-entity ${aiState}`}>
+          {/* Core orb */}
+          <div className="ai-core"></div>
 
-      {/* Aurora effect */}
-      <div className="aurora"></div>
+          {/* Listening mode - ripples inward */}
+          {aiState === 'listening' && (
+            <>
+              <div className="sound-wave wave-1"></div>
+              <div className="sound-wave wave-2"></div>
+              <div className="sound-wave wave-3"></div>
+            </>
+          )}
 
-      {/* Central Sun */}
-      <div className="sun">
-        <div className="sun-core"></div>
-        <div className="sun-corona"></div>
-      </div>
+          {/* Speaking mode - ripples outward */}
+          {aiState === 'speaking' && (
+            <>
+              <div className="speak-wave wave-1"></div>
+              <div className="speak-wave wave-2"></div>
+              <div className="speak-wave wave-3"></div>
+              <div className="speak-wave wave-4"></div>
+            </>
+          )}
 
-      {/* Orbital system */}
-      <div className="solar-system">
-        {planets.map((planet, index) => {
-          const angle = time * planet.orbitSpeed + (index * 90)
-          const radian = (angle * Math.PI) / 180
-          const x = Math.cos(radian) * planet.distance
-          const y = Math.sin(radian) * planet.distance * 0.3
-
-          return (
-            <div key={planet.name}>
-              {/* Orbit ring */}
-              <div
-                className="orbit-ring"
-                style={{
-                  width: planet.distance * 2,
-                  height: planet.distance * 2 * 0.3,
-                }}
-              ></div>
-
-              {/* Planet */}
-              <div
-                className={`planet ${selectedPlanet === planet.name ? 'planet-selected' : ''}`}
-                style={{
-                  width: planet.size,
-                  height: planet.size,
-                  background: `radial-gradient(circle at 30% 30%, ${planet.color}, ${planet.color}dd)`,
-                  left: `calc(50% + ${x}px)`,
-                  top: `calc(50% + ${y}px)`,
-                  boxShadow: `0 0 ${planet.size}px ${planet.color}88, inset -${planet.size/4}px -${planet.size/4}px ${planet.size/2}px rgba(0,0,0,0.5)`
-                }}
-                onClick={() => setSelectedPlanet(planet.name)}
-              >
-                <div className="planet-glow" style={{ background: planet.color }}></div>
+          {/* Thinking mode - neural connections */}
+          {aiState === 'thinking' && (
+            <div className="neural-network">
+              <div className="neural-ring ring-1"></div>
+              <div className="neural-ring ring-2"></div>
+              <div className="neural-ring ring-3"></div>
+              <div className="neural-dots">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="neural-dot" style={{ '--i': i }}></div>
+                ))}
               </div>
             </div>
-          )
-        })}
-      </div>
+          )}
 
-      {/* Content */}
-      <div className="cosmic-content">
-        <h1 className="cosmic-title">
-          <span className="title-word">COSMIC</span>
-          <span className="title-word">EXPLORER</span>
-        </h1>
+          {/* Idle mode - gentle pulse */}
+          {aiState === 'idle' && (
+            <>
+              <div className="idle-ring ring-1"></div>
+              <div className="idle-ring ring-2"></div>
+            </>
+          )}
+        </div>
 
-        <p className="cosmic-subtitle">Journey Through the Digital Universe</p>
-
-        {/* Orbital cards */}
-        <div className="orbital-cards">
-          <div className="cosmic-card" data-tilt="left">
-            <div className="card-shine"></div>
-            <div className="card-planet-icon">🌍</div>
-            <h3>Discover Worlds</h3>
-            <p>Explore infinite planetary systems</p>
-            <div className="card-stats">
-              <span>4 Planets</span>
-              <span>∞ Stars</span>
-            </div>
+        {/* State indicator */}
+        <div className="state-indicator">
+          <div className="state-label" style={{ color: stateConfig[aiState].color }}>
+            {stateConfig[aiState].label}
           </div>
+          <div className="state-description">{stateConfig[aiState].description}</div>
+        </div>
 
-          <div className="cosmic-card" data-tilt="center">
-            <div className="card-shine"></div>
-            <div className="card-planet-icon">🌌</div>
-            <h3>Navigate Space</h3>
-            <p>Chart your course through nebulas</p>
-            <div className="card-stats">
-              <span>3D Orbits</span>
-              <span>Real-time</span>
-            </div>
-          </div>
-
-          <div className="cosmic-card" data-tilt="right">
-            <div className="card-shine"></div>
-            <div className="card-planet-icon">⭐</div>
-            <h3>Pure CSS Magic</h3>
-            <p>No libraries, just imagination</p>
-            <div className="card-stats">
-              <span>60 FPS</span>
-              <span>Responsive</span>
-            </div>
-          </div>
+        {/* Mode controls */}
+        <div className="mode-controls">
+          <button
+            className={`mode-btn ${aiState === 'idle' ? 'active' : ''}`}
+            onClick={() => setAiState('idle')}
+          >
+            <span className="mode-icon">◉</span>
+            Idle
+          </button>
+          <button
+            className={`mode-btn ${aiState === 'listening' ? 'active' : ''}`}
+            onClick={() => setAiState('listening')}
+          >
+            <span className="mode-icon">⊙</span>
+            Listen
+          </button>
+          <button
+            className={`mode-btn ${aiState === 'speaking' ? 'active' : ''}`}
+            onClick={() => setAiState('speaking')}
+          >
+            <span className="mode-icon">◎</span>
+            Speak
+          </button>
+          <button
+            className={`mode-btn ${aiState === 'thinking' ? 'active' : ''}`}
+            onClick={() => setAiState('thinking')}
+          >
+            <span className="mode-icon">◈</span>
+            Think
+          </button>
         </div>
 
         {/* Info panel */}
-        {selectedPlanet && (
-          <div className="planet-info">
-            <h4>{selectedPlanet}</h4>
-            <p>Selected Planet</p>
-            <button onClick={() => setSelectedPlanet(null)}>Close</button>
+        <div className="info-panel">
+          <div className="info-item">
+            <span className="info-label">Status</span>
+            <span className="info-value">Active</span>
           </div>
-        )}
-
-        {/* Coordinates */}
-        <div className="space-coords">
-          <div className="coord-item">
-            <span className="coord-label">X-Axis</span>
-            <span className="coord-value">{Math.round(mousePos.x)}°</span>
+          <div className="info-item">
+            <span className="info-label">Uptime</span>
+            <span className="info-value">{Math.floor(time / 20)}s</span>
           </div>
-          <div className="coord-item">
-            <span className="coord-label">Y-Axis</span>
-            <span className="coord-value">{Math.round(mousePos.y)}°</span>
-          </div>
-          <div className="coord-item">
-            <span className="coord-label">Rotation</span>
-            <span className="coord-value">{Math.round(time)}°</span>
+          <div className="info-item">
+            <span className="info-label">Performance</span>
+            <span className="info-value">Optimal</span>
           </div>
         </div>
       </div>
