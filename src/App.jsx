@@ -65,32 +65,35 @@ function App() {
 
   return (
     <div className="App">
-      {/* Animated background blobs */}
-      <div className="blob blob-1"></div>
-      <div className="blob blob-2"></div>
-      <div className="blob blob-3"></div>
+      {/* Retro grid background */}
+      <div className="retro-grid"></div>
+      <div className="retro-sun"></div>
 
-      {/* Particle system */}
+      {/* CRT scanlines effect */}
+      <div className="scanlines"></div>
+      <div className="vhs-effect"></div>
+
+      {/* Neon particles */}
       <div className="particles">
         {particles.map(particle => (
           <div
             key={particle.id}
-            className="particle"
+            className="particle neon-particle"
             style={{
               left: particle.x,
               top: particle.y,
               width: particle.size,
               height: particle.size,
               opacity: particle.life,
-              background: `hsl(${(particle.x + particle.y) % 360}, 80%, 60%)`
+              boxShadow: `0 0 ${particle.size * 3}px #ff00ff, 0 0 ${particle.size * 5}px #00ffff`
             }}
           />
         ))}
       </div>
 
-      {/* Mouse follower */}
+      {/* Neon cursor glow */}
       <div
-        className="mouse-glow"
+        className="cursor-glow"
         style={{
           left: mousePos.x,
           top: mousePos.y
@@ -98,56 +101,75 @@ function App() {
       />
 
       <div className="content">
-        <h1 className="magical-title">
-          <span className="letter">M</span>
-          <span className="letter">A</span>
-          <span className="letter">G</span>
-          <span className="letter">I</span>
-          <span className="letter">C</span>
-          <span className="letter">A</span>
-          <span className="letter">L</span>
-        </h1>
+        {/* Retro header with VHS glitch */}
+        <div className="retro-header">
+          <div className="glitch-text">
+            <span className="glitch-layer">R E T R O</span>
+            <span className="glitch-layer">R E T R O</span>
+            <span className="glitch-layer">R E T R O</span>
+          </div>
+          <div className="year-badge">[ 1 9 8 7 ]</div>
+        </div>
 
-        <p className="subtitle">Experience the wonder of interactive design</p>
+        <p className="subtitle terminal-text">&gt;&gt; WELCOME TO THE DIGITAL FUTURE &lt;&lt;</p>
 
+        {/* Retro arcade cards */}
         <div className="cards-container">
           <div
-            className="glass-card"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            className="retro-card"
             onClick={handleCardClick}
           >
-            <div className="card-icon">✨</div>
-            <h3>Create Magic</h3>
-            <p>Click to unleash particle explosion</p>
+            <div className="card-corner tl"></div>
+            <div className="card-corner tr"></div>
+            <div className="card-corner bl"></div>
+            <div className="card-corner br"></div>
+            <div className="card-icon retro-icon">▲</div>
+            <h3>ARCADE MODE</h3>
+            <p>PRESS TO ACTIVATE</p>
+            <div className="blink-text">█ READY █</div>
           </div>
 
-          <div className="glass-card floating">
-            <div className="card-icon">🌟</div>
-            <h3>Move Your Mouse</h3>
-            <p>Watch the particles follow you</p>
+          <div className="retro-card neon-pulse">
+            <div className="card-corner tl"></div>
+            <div className="card-corner tr"></div>
+            <div className="card-corner bl"></div>
+            <div className="card-corner br"></div>
+            <div className="card-icon retro-icon">♦</div>
+            <h3>NEON TRAILS</h3>
+            <p>MOVE CURSOR</p>
+            <div className="blink-text">█ ACTIVE █</div>
           </div>
 
-          <div className="glass-card">
-            <div className="card-icon">🎨</div>
-            <h3>Pure CSS & React</h3>
-            <p>No heavy libraries needed</p>
+          <div className="retro-card">
+            <div className="card-corner tl"></div>
+            <div className="card-corner tr"></div>
+            <div className="card-corner bl"></div>
+            <div className="card-corner br"></div>
+            <div className="card-icon retro-icon">◆</div>
+            <h3>SYNTHWAVE</h3>
+            <p>PURE VIBES</p>
+            <div className="blink-text">█ ONLINE █</div>
           </div>
         </div>
 
-        <div className="stats">
-          <div className="stat-item">
-            <div className="stat-value">{particles.length}</div>
-            <div className="stat-label">Active Particles</div>
+        {/* Retro terminal stats */}
+        <div className="terminal-stats">
+          <div className="stat-row">
+            <span className="stat-label-retro">[PARTICLES]</span>
+            <span className="stat-value-retro">{particles.length.toString().padStart(3, '0')}</span>
           </div>
-          <div className="stat-item">
-            <div className="stat-value">{Math.round(mousePos.x)}</div>
-            <div className="stat-label">X Position</div>
+          <div className="stat-row">
+            <span className="stat-label-retro">[COORD-X]</span>
+            <span className="stat-value-retro">{Math.round(mousePos.x).toString().padStart(4, '0')}</span>
           </div>
-          <div className="stat-item">
-            <div className="stat-value">{Math.round(mousePos.y)}</div>
-            <div className="stat-label">Y Position</div>
+          <div className="stat-row">
+            <span className="stat-label-retro">[COORD-Y]</span>
+            <span className="stat-value-retro">{Math.round(mousePos.y).toString().padStart(4, '0')}</span>
           </div>
+        </div>
+
+        <div className="footer-text">
+          ◢◤◢◤◢◤ SYSTEM OPERATIONAL ◢◤◢◤◢◤
         </div>
       </div>
     </div>
