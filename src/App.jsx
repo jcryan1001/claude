@@ -124,12 +124,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      {/* Simple background */}
+    <div className={`App ${chatOpen ? 'chat-open' : ''}`}>
+      {/* Animated background */}
       <div className="simple-bg"></div>
 
-      {/* Central AI Entity */}
-      <div className="ai-container">
+      {/* Orb Section - Left Side */}
+      <div className="orb-section">
+        <div className="ai-container">
         <div className={`ai-orb ${aiState}`}>
           {/* Main glowing 3D orb */}
           <div className="orb-core">
@@ -200,18 +201,11 @@ function App() {
             <span className="info-value">{Math.floor(time / 20)}s</span>
           </div>
         </div>
-
+        </div>
       </div>
 
-      {/* Floating Chat Toggle Button */}
-      <button
-        className={`chat-toggle-btn ${chatOpen ? 'open' : ''}`}
-        onClick={() => setChatOpen(!chatOpen)}
-        aria-label={chatOpen ? 'Close chat' : 'Open chat'}
-      />
-
-      {/* Chat Interface */}
-      {chatOpen && (
+      {/* Chat Section - Right Side */}
+      <div className="chat-section">
         <div className="chat-container">
           <div className="chat-header">
             <h3>AI Chat</h3>
@@ -262,7 +256,14 @@ function App() {
             </button>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Floating Chat Toggle Button */}
+      <button
+        className={`chat-toggle-btn ${chatOpen ? 'open' : ''}`}
+        onClick={() => setChatOpen(!chatOpen)}
+        aria-label={chatOpen ? 'Close chat' : 'Open chat'}
+      />
     </div>
   )
 }
