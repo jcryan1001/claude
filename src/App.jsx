@@ -5,6 +5,7 @@ function App() {
   const [aiState, setAiState] = useState('idle') // idle, listening, speaking, thinking
   const [time, setTime] = useState(0)
   const [chatOpen, setChatOpen] = useState(false)
+  const [chatClosing, setChatClosing] = useState(false)
   const [messages, setMessages] = useState([])
   const [inputText, setInputText] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
@@ -22,6 +23,15 @@ function App() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  const handleCloseChat = () => {
+    setChatClosing(true)
+    setTimeout(() => {
+      setChatOpen(false)
+      setChatClosing(false)
+      setMessages([]) // Clear messages after closing animation
+    }, 400) // Wait for fade out animation
+  }
 
   const stateConfig = {
     idle: { label: 'Resting', color: '#60a5fa', description: 'AI is in idle mode' },
@@ -124,7 +134,7 @@ function App() {
   }
 
   return (
-    <div className={`App ${chatOpen ? 'chat-open' : ''}`}>
+    <div className={`App ${chatOpen ? 'chat-open' : ''} ${chatClosing ? 'chat-closing' : ''}`}>
       {/* Animated background */}
       <div className="simple-bg"></div>
 
@@ -209,7 +219,7 @@ function App() {
         <div className="chat-container">
           <div className="chat-header">
             <h3>AI Chat</h3>
-            <button className="close-chat-btn" onClick={() => setChatOpen(false)}>×</button>
+            <button className="close-chat-btn" onClick={handleCloseChat}>×</button>
           </div>
 
           <div className="chat-messages">
@@ -261,7 +271,7 @@ function App() {
       {/* Floating Chat Toggle Button */}
       <button
         className={`chat-toggle-btn ${chatOpen ? 'open' : ''}`}
-        onClick={() => setChatOpen(!chatOpen)}
+        onClick={() => chatOpen ? handleCloseChat() : setChatOpen(true)}
         aria-label={chatOpen ? 'Close chat' : 'Open chat'}
       />
     </div>
