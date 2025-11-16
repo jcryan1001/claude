@@ -35,55 +35,101 @@ function App() {
 
   return (
     <div className="App">
-      {/* Subtle background gradient */}
+      {/* Dynamic background with grid */}
       <div className="ai-background"></div>
+      <div className="cyber-grid"></div>
+
+      {/* Particle field */}
+      <div className="particle-field">
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              '--i': i,
+              '--tx': Math.random() * 200 - 100,
+              '--ty': Math.random() * 200 - 100
+            }}
+          ></div>
+        ))}
+      </div>
 
       {/* Central AI Entity */}
       <div className="ai-container">
         <div className={`ai-entity ${aiState}`}>
-          {/* Core orb */}
-          <div className="ai-core"></div>
+          {/* Holographic scan lines */}
+          <div className="holo-scan"></div>
+          <div className="holo-scan-2"></div>
 
-          {/* Listening mode - ripples inward */}
-          {aiState === 'listening' && (
-            <>
-              <div className="sound-wave wave-1"></div>
-              <div className="sound-wave wave-2"></div>
-              <div className="sound-wave wave-3"></div>
-            </>
-          )}
+          {/* Multiple rotating geometric shapes */}
+          <div className="geo-shape octahedron"></div>
+          <div className="geo-shape cube"></div>
+          <div className="geo-shape tetrahedron"></div>
 
-          {/* Speaking mode - ripples outward */}
-          {aiState === 'speaking' && (
-            <>
-              <div className="speak-wave wave-1"></div>
-              <div className="speak-wave wave-2"></div>
-              <div className="speak-wave wave-3"></div>
-              <div className="speak-wave wave-4"></div>
-            </>
-          )}
+          {/* Core energy sphere */}
+          <div className="energy-core">
+            <div className="core-inner"></div>
+            <div className="core-glow"></div>
+          </div>
 
-          {/* Thinking mode - neural connections */}
-          {aiState === 'thinking' && (
-            <div className="neural-network">
-              <div className="neural-ring ring-1"></div>
-              <div className="neural-ring ring-2"></div>
-              <div className="neural-ring ring-3"></div>
-              <div className="neural-dots">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="neural-dot" style={{ '--i': i }}></div>
-                ))}
-              </div>
+          {/* Data streams flowing around */}
+          <div className="data-streams">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="data-stream" style={{ '--stream-i': i }}></div>
+            ))}
+          </div>
+
+          {/* IDLE - Constellation pattern */}
+          {aiState === 'idle' && (
+            <div className="constellation">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="star" style={{ '--star-i': i }}></div>
+              ))}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="connection-line" style={{ '--line-i': i }}></div>
+              ))}
             </div>
           )}
 
-          {/* Idle mode - gentle pulse */}
-          {aiState === 'idle' && (
-            <>
-              <div className="idle-ring ring-1"></div>
-              <div className="idle-ring ring-2"></div>
-            </>
+          {/* LISTENING - Sound spectrum bars */}
+          {aiState === 'listening' && (
+            <div className="sound-spectrum">
+              {[...Array(24)].map((_, i) => (
+                <div key={i} className="spectrum-bar" style={{ '--bar-i': i }}></div>
+              ))}
+            </div>
           )}
+
+          {/* SPEAKING - Fractal waves */}
+          {aiState === 'speaking' && (
+            <div className="fractal-system">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="fractal-ring" style={{ '--frac-i': i }}></div>
+              ))}
+              <div className="voice-pulse"></div>
+            </div>
+          )}
+
+          {/* THINKING - Neural web */}
+          {aiState === 'thinking' && (
+            <div className="neural-web">
+              {[...Array(16)].map((_, i) => (
+                <div key={i} className="neural-node" style={{ '--node-i': i }}>
+                  <div className="node-pulse"></div>
+                </div>
+              ))}
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="neural-link" style={{ '--link-i': i }}></div>
+              ))}
+            </div>
+          )}
+
+          {/* Energy tendrils */}
+          <div className="energy-tendrils">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="tendril" style={{ '--tendril-i': i }}></div>
+            ))}
+          </div>
         </div>
 
         {/* State indicator */}
