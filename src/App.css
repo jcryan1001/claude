@@ -9,6 +9,7 @@
 body {
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  background: #000;
 }
 
 /* Main App Container - Split Layout */
@@ -16,22 +17,59 @@ body {
   position: relative;
   min-height: 100vh;
   display: flex;
-  background: #0a0a0a;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #000;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Animated Background */
+/* Starry Background with Animation */
 .simple-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(96, 165, 250, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a0a 100%);
+  background: #000;
   z-index: 0;
+  overflow: hidden;
+}
+
+.simple-bg::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 90%, white, transparent),
+    radial-gradient(1px 1px at 70% 40%, white, transparent);
+  background-size: 200px 200px, 250px 250px, 300px 300px, 350px 350px, 180px 180px, 220px 220px, 280px 280px;
+  background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 150px 50px, 90px 180px, 200px 120px;
+  animation: starfield 200s linear infinite;
+  opacity: 0.5;
+}
+
+.simple-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(212, 175, 55, 0.03), transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(192, 192, 192, 0.03), transparent 50%);
+  pointer-events: none;
+}
+
+@keyframes starfield {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Orb Section - Left Side */
@@ -42,17 +80,16 @@ body {
   justify-content: center;
   position: relative;
   z-index: 1;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 2rem;
 }
 
-/* When chat opens, orb moves to left */
 .App.chat-open .orb-section {
   flex: 0 0 40%;
   min-width: 400px;
 }
 
-/* AI Container */
+/* AI Container with fade transitions */
 .ai-container {
   display: flex;
   flex-direction: column;
@@ -60,7 +97,7 @@ body {
   gap: 2rem;
   width: 100%;
   max-width: 500px;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .App.chat-open .ai-container {
@@ -68,7 +105,26 @@ body {
   gap: 1.5rem;
 }
 
-/* AI Orb - Enhanced Design */
+/* Stagger fade for state indicator */
+.state-indicator,
+.info-panel {
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.App.chat-open .state-indicator {
+  opacity: 0.7;
+  transform: scale(0.85);
+  transition-delay: 0.1s;
+}
+
+.App.chat-open .info-panel {
+  opacity: 0.5;
+  transform: scale(0.85);
+  transition-delay: 0.2s;
+}
+
+/* AI Orb - Dark Silver Gold Theme */
 .ai-orb {
   position: relative;
   width: 350px;
@@ -76,8 +132,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 80px rgba(96, 165, 250, 0.5));
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 100px rgba(192, 192, 192, 0.2));
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .App.chat-open .ai-orb {
@@ -85,22 +141,27 @@ body {
   height: 280px;
 }
 
-/* Core Orb - More depth and glow */
+/* Core Orb - Silver and Gold with Dark Theme */
 .orb-core {
   position: relative;
   width: 200px;
   height: 200px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), transparent 30%),
-    radial-gradient(circle at 40% 40%, #60a5fa, #3b82f6, #2563eb, #1e3a8a);
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 20%),
+    radial-gradient(circle at 35% 35%, rgba(212, 175, 55, 0.6), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(192, 192, 192, 0.4), rgba(169, 169, 169, 0.3), rgba(105, 105, 105, 0.5)),
+    linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(192, 192, 192, 0.3), rgba(169, 169, 169, 0.4), rgba(212, 175, 55, 0.3)),
+    radial-gradient(circle at 50% 50%, #1a1a1a, #0a0a0a);
   box-shadow:
-    0 0 80px rgba(96, 165, 250, 0.8),
-    0 0 120px rgba(96, 165, 250, 0.5),
-    inset 0 0 60px rgba(255, 255, 255, 0.2),
-    inset -20px -20px 60px rgba(30, 58, 138, 0.8);
-  animation: orb-pulse 3s ease-in-out infinite;
-  transition: all 0.6s ease;
+    0 0 60px rgba(212, 175, 55, 0.5),
+    0 0 100px rgba(192, 192, 192, 0.3),
+    0 0 140px rgba(212, 175, 55, 0.2),
+    inset 0 0 40px rgba(255, 255, 255, 0.1),
+    inset -15px -15px 50px rgba(212, 175, 55, 0.2),
+    inset 15px 15px 50px rgba(192, 192, 192, 0.15);
+  animation: orb-pulse 4s ease-in-out infinite;
+  transition: all 0.8s ease;
   z-index: 10;
 }
 
@@ -109,7 +170,7 @@ body {
   height: 150px;
 }
 
-/* 3D Surface Layer */
+/* Floating particles inside orb */
 .orb-surface {
   position: absolute;
   top: 0;
@@ -117,53 +178,56 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 255, 255, 0.2) 25%,
-    transparent 50%
-  );
-  opacity: 0.9;
-  animation: surface-shimmer 4s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8), transparent 15%),
+    radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.3), transparent 20%);
+  opacity: 0.95;
+  animation: surface-float 6s ease-in-out infinite;
 }
 
-@keyframes surface-shimmer {
+@keyframes surface-float {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.9;
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.95;
   }
-  50% {
-    transform: translate(-5px, -5px) scale(1.05);
+  33% {
+    transform: translate(-3px, -3px) rotate(120deg);
     opacity: 1;
   }
+  66% {
+    transform: translate(3px, 3px) rotate(240deg);
+    opacity: 0.9;
+  }
 }
 
-/* 3D Highlight - Moving light reflection */
+/* Glowing highlight - Gold/Silver shimmer */
 .orb-highlight {
   position: absolute;
-  top: 10%;
-  left: 15%;
-  width: 50%;
-  height: 50%;
+  top: 8%;
+  left: 12%;
+  width: 45%;
+  height: 45%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.4) 30%,
-    transparent 60%
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 250, 205, 0.8) 20%,
+    rgba(212, 175, 55, 0.4) 40%,
+    transparent 70%
   );
-  filter: blur(15px);
+  filter: blur(12px);
   animation: highlight-shimmer 5s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
 @keyframes highlight-shimmer {
   0%, 100% {
-    opacity: 0.7;
+    opacity: 0.8;
     transform: scale(1) translate(0, 0);
   }
   50% {
     opacity: 1;
-    transform: scale(1.2) translate(5px, 5px);
+    transform: scale(1.15) translate(4px, 4px);
   }
 }
 
@@ -172,17 +236,19 @@ body {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.03);
+    transform: scale(1.025);
   }
 }
 
-/* Wave Ripples - More visible */
+/* Wave Ripples - Silver/Gold */
 .wave {
   position: absolute;
   border-radius: 50%;
-  border: 3px solid rgba(96, 165, 250, 0.4);
-  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
-  animation: wave-expand 3s ease-out infinite;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.2),
+    inset 0 0 15px rgba(192, 192, 192, 0.1);
+  animation: wave-expand 4s ease-out infinite;
   opacity: 0;
 }
 
@@ -195,59 +261,77 @@ body {
 .wave-2 {
   width: 200px;
   height: 200px;
-  animation-delay: 1s;
+  animation-delay: 1.3s;
 }
 
 .wave-3 {
   width: 200px;
   height: 200px;
-  animation-delay: 2s;
+  animation-delay: 2.6s;
 }
 
 @keyframes wave-expand {
   0% {
     transform: scale(1);
-    opacity: 0.7;
-    border-width: 3px;
+    opacity: 0.6;
+    border-width: 2px;
+  }
+  50% {
+    opacity: 0.3;
   }
   100% {
-    transform: scale(2.5);
+    transform: scale(2.8);
     opacity: 0;
-    border-width: 1px;
+    border-width: 0.5px;
   }
 }
 
-/* Orbiting Dots - Larger and glowier */
+/* Orbiting Dots - Gold/Silver stars */
 .orbit-dot {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(96, 165, 250, 1);
+  background: radial-gradient(circle, rgba(255, 255, 255, 1), rgba(212, 175, 55, 0.8));
   box-shadow:
-    0 0 20px rgba(96, 165, 250, 1),
-    0 0 40px rgba(96, 165, 250, 0.5);
+    0 0 15px rgba(255, 255, 255, 0.8),
+    0 0 30px rgba(212, 175, 55, 0.6),
+    0 0 45px rgba(212, 175, 55, 0.3);
+  animation-timing-function: linear;
+}
+
+.orbit-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 1);
 }
 
 .dot-1 {
   top: 50%;
   left: 50%;
-  margin: -6px 0 0 -6px;
-  animation: orbit-1 8s linear infinite;
+  margin: -4px 0 0 -4px;
+  animation: orbit-1 10s linear infinite;
 }
 
 .dot-2 {
   top: 50%;
   left: 50%;
-  margin: -6px 0 0 -6px;
-  animation: orbit-2 10s linear infinite;
+  margin: -4px 0 0 -4px;
+  animation: orbit-2 13s linear infinite;
 }
 
 .dot-3 {
   top: 50%;
   left: 50%;
-  margin: -6px 0 0 -6px;
-  animation: orbit-3 12s linear infinite;
+  margin: -4px 0 0 -4px;
+  animation: orbit-3 16s linear infinite;
 }
 
 @keyframes orbit-1 {
@@ -277,34 +361,42 @@ body {
   }
 }
 
-/* Rings - Thicker and more visible */
+/* Rings - Silver/Gold mystical circles */
 .ring {
   position: absolute;
   border-radius: 50%;
-  border: 4px solid rgba(96, 165, 250, 0.4);
+  border: 2px solid transparent;
+  background: linear-gradient(#000, #000) padding-box,
+    linear-gradient(135deg,
+      rgba(212, 175, 55, 0.4),
+      rgba(192, 192, 192, 0.3),
+      rgba(212, 175, 55, 0.2),
+      rgba(192, 192, 192, 0.4)) border-box;
   box-shadow:
-    0 0 30px rgba(96, 165, 250, 0.4),
-    inset 0 0 30px rgba(96, 165, 250, 0.2);
-  animation: ring-rotate 20s linear infinite;
+    0 0 20px rgba(212, 175, 55, 0.3),
+    0 0 40px rgba(192, 192, 192, 0.2),
+    inset 0 0 20px rgba(212, 175, 55, 0.1);
+  animation: ring-rotate 25s linear infinite;
+  opacity: 0.7;
 }
 
 .ring-1 {
   width: 240px;
   height: 240px;
-  animation-duration: 20s;
+  animation-duration: 25s;
 }
 
 .ring-2 {
   width: 300px;
   height: 300px;
-  animation-duration: 30s;
+  animation-duration: 35s;
   animation-direction: reverse;
 }
 
 .ring-3 {
   width: 350px;
   height: 350px;
-  animation-duration: 40s;
+  animation-duration: 45s;
 }
 
 @keyframes ring-rotate {
@@ -316,60 +408,63 @@ body {
   }
 }
 
-/* IDLE State */
+/* IDLE State - Silver dominant */
 .ai-orb.idle .orb-core {
-  background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), transparent 30%),
-    radial-gradient(circle at 40% 40%, #60a5fa, #3b82f6, #2563eb, #1e3a8a);
   box-shadow:
-    0 0 80px rgba(96, 165, 250, 0.8),
-    0 0 120px rgba(96, 165, 250, 0.5),
-    inset 0 0 60px rgba(255, 255, 255, 0.2),
-    inset -20px -20px 60px rgba(30, 58, 138, 0.8);
+    0 0 60px rgba(192, 192, 192, 0.6),
+    0 0 100px rgba(192, 192, 192, 0.4),
+    0 0 140px rgba(212, 175, 55, 0.2),
+    inset 0 0 40px rgba(255, 255, 255, 0.1),
+    inset -15px -15px 50px rgba(192, 192, 192, 0.3);
 }
 
-.ai-orb.idle .ring {
-  border-color: rgba(96, 165, 250, 0.4);
-  box-shadow: 0 0 30px rgba(96, 165, 250, 0.4);
-}
-
-.ai-orb.idle .wave {
-  border-color: rgba(96, 165, 250, 0.4);
-}
-
-.ai-orb.idle .orbit-dot {
-  background: rgba(96, 165, 250, 1);
-  box-shadow: 0 0 20px rgba(96, 165, 250, 1);
-}
-
-/* LISTENING State */
+/* LISTENING State - Gold intensifies */
 .ai-orb.listening .orb-core {
-  background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), transparent 30%),
-    radial-gradient(circle at 40% 40%, #34d399, #10b981, #059669, #065f46);
   box-shadow:
-    0 0 80px rgba(52, 211, 153, 0.9),
-    0 0 120px rgba(52, 211, 153, 0.6),
-    inset 0 0 60px rgba(255, 255, 255, 0.2),
-    inset -20px -20px 60px rgba(6, 95, 70, 0.8);
-  animation: orb-pulse-fast 1s ease-in-out infinite;
-}
-
-.ai-orb.listening .ring {
-  border-color: rgba(52, 211, 153, 0.6);
-  box-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
+    0 0 70px rgba(212, 175, 55, 0.8),
+    0 0 110px rgba(212, 175, 55, 0.5),
+    0 0 150px rgba(212, 175, 55, 0.3),
+    inset 0 0 50px rgba(255, 250, 205, 0.2),
+    inset -15px -15px 50px rgba(212, 175, 55, 0.4);
+  animation: orb-pulse-fast 1.2s ease-in-out infinite;
 }
 
 .ai-orb.listening .wave {
-  border-color: rgba(52, 211, 153, 0.5);
-}
-
-.ai-orb.listening .orbit-dot {
-  background: rgba(52, 211, 153, 1);
-  box-shadow: 0 0 25px rgba(52, 211, 153, 1);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 
 @keyframes orb-pulse-fast {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+/* SPEAKING State - Bright gold/silver mix */
+.ai-orb.speaking .orb-core {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 1), transparent 20%),
+    radial-gradient(circle at 35% 35%, rgba(255, 223, 0, 0.7), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.5), rgba(255, 215, 0, 0.3), rgba(218, 165, 32, 0.4)),
+    radial-gradient(circle at 50% 50%, #1a1a1a, #0a0a0a);
+  box-shadow:
+    0 0 80px rgba(255, 215, 0, 0.7),
+    0 0 120px rgba(212, 175, 55, 0.5),
+    0 0 160px rgba(255, 215, 0, 0.3),
+    inset 0 0 50px rgba(255, 255, 255, 0.2),
+    inset -15px -15px 50px rgba(255, 215, 0, 0.3);
+  animation: orb-pulse-rapid 0.8s ease-in-out infinite;
+}
+
+.ai-orb.speaking .wave {
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes orb-pulse-rapid {
   0%, 100% {
     transform: scale(1);
   }
@@ -378,87 +473,58 @@ body {
   }
 }
 
-/* SPEAKING State */
-.ai-orb.speaking .orb-core {
+/* THINKING State - Silver with gold sparks */
+.ai-orb.thinking .orb-core {
   background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), transparent 30%),
-    radial-gradient(circle at 40% 40%, #f472b6, #ec4899, #db2777, #9f1239);
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 20%),
+    radial-gradient(circle at 60% 40%, rgba(212, 175, 55, 0.3), transparent 30%),
+    radial-gradient(circle at 40% 60%, rgba(192, 192, 192, 0.4), transparent 35%),
+    radial-gradient(circle at 50% 50%, rgba(192, 192, 192, 0.5), rgba(169, 169, 169, 0.4), rgba(128, 128, 128, 0.5)),
+    radial-gradient(circle at 50% 50%, #1a1a1a, #0a0a0a);
   box-shadow:
-    0 0 80px rgba(244, 114, 182, 0.9),
-    0 0 120px rgba(244, 114, 182, 0.6),
-    inset 0 0 60px rgba(255, 255, 255, 0.2),
-    inset -20px -20px 60px rgba(159, 18, 57, 0.8);
-  animation: orb-pulse-rapid 0.6s ease-in-out infinite;
+    0 0 65px rgba(192, 192, 192, 0.7),
+    0 0 105px rgba(212, 175, 55, 0.4),
+    0 0 145px rgba(192, 192, 192, 0.3),
+    inset 0 0 45px rgba(255, 255, 255, 0.15),
+    inset -15px -15px 50px rgba(192, 192, 192, 0.3);
+  animation: orb-pulse-slow 2s ease-in-out infinite;
 }
 
-.ai-orb.speaking .ring {
-  border-color: rgba(244, 114, 182, 0.6);
-  box-shadow: 0 0 40px rgba(244, 114, 182, 0.6);
+.ai-orb.thinking .ring {
+  animation-duration: 15s, 20s, 25s;
+  opacity: 0.9;
 }
 
-.ai-orb.speaking .wave {
-  border-color: rgba(244, 114, 182, 0.5);
+.ai-orb.thinking .orbit-dot {
+  animation-duration: 8s, 10s, 12s;
 }
 
-.ai-orb.speaking .orbit-dot {
-  background: rgba(244, 114, 182, 1);
-  box-shadow: 0 0 25px rgba(244, 114, 182, 1);
-}
-
-@keyframes orb-pulse-rapid {
+@keyframes orb-pulse-slow {
   0%, 100% {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.03);
   }
-}
-
-/* THINKING State */
-.ai-orb.thinking .orb-core {
-  background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), transparent 30%),
-    radial-gradient(circle at 40% 40%, #a78bfa, #8b5cf6, #7c3aed, #5b21b6);
-  box-shadow:
-    0 0 80px rgba(167, 139, 250, 0.9),
-    0 0 120px rgba(167, 139, 250, 0.6),
-    inset 0 0 60px rgba(255, 255, 255, 0.2),
-    inset -20px -20px 60px rgba(91, 33, 182, 0.8);
-}
-
-.ai-orb.thinking .ring {
-  border-color: rgba(167, 139, 250, 0.6);
-  box-shadow: 0 0 40px rgba(167, 139, 250, 0.6);
-  animation-duration: 5s, 7s, 9s;
-}
-
-.ai-orb.thinking .wave {
-  border-color: rgba(167, 139, 250, 0.5);
-}
-
-.ai-orb.thinking .orbit-dot {
-  background: rgba(167, 139, 250, 1);
-  box-shadow: 0 0 25px rgba(167, 139, 250, 1);
 }
 
 /* State Indicator */
 .state-indicator {
   text-align: center;
-  transition: all 0.5s ease;
-}
-
-.App.chat-open .state-indicator {
-  transform: scale(0.85);
 }
 
 .state-label {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   transition: color 0.5s ease;
-  text-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.9), rgba(192, 192, 192, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
 }
 
 .App.chat-open .state-label {
@@ -467,25 +533,20 @@ body {
 
 .state-description {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(212, 175, 55, 0.6);
   font-weight: 300;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-/* Info Panel - Hidden when chat open on desktop */
+/* Info Panel */
 .info-panel {
   display: flex;
   gap: 2rem;
   padding: 1.2rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 15px;
   backdrop-filter: blur(10px);
-  transition: all 0.5s ease;
-}
-
-.App.chat-open .info-panel {
-  opacity: 0.7;
-  transform: scale(0.85);
 }
 
 .info-item {
@@ -497,7 +558,7 @@ body {
 
 .info-label {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(192, 192, 192, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 500;
@@ -505,11 +566,12 @@ body {
 
 .info-value {
   font-size: 1rem;
-  color: white;
+  color: rgba(212, 175, 55, 0.9);
   font-weight: 600;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
-/* Chat Toggle Button - Fixed position */
+/* Chat Toggle Button */
 .chat-toggle-btn {
   position: fixed;
   bottom: 2rem;
@@ -517,19 +579,18 @@ body {
   width: 70px;
   height: 70px;
   padding: 0;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border: 3px solid rgba(96, 165, 250, 0.6);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(192, 192, 192, 0.3));
+  border: 2px solid rgba(212, 175, 55, 0.5);
   border-radius: 50%;
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 2rem;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: 'Inter', sans-serif;
   backdrop-filter: blur(10px);
   box-shadow:
-    0 6px 30px rgba(96, 165, 250, 0.5),
-    0 0 60px rgba(96, 165, 250, 0.3);
+    0 6px 30px rgba(212, 175, 55, 0.3),
+    0 0 60px rgba(212, 175, 55, 0.2);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -537,11 +598,11 @@ body {
 }
 
 .chat-toggle-btn:hover {
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
-  border-color: rgba(96, 165, 250, 0.9);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(192, 192, 192, 0.4));
+  border-color: rgba(212, 175, 55, 0.8);
   box-shadow:
-    0 8px 40px rgba(96, 165, 250, 0.7),
-    0 0 80px rgba(96, 165, 250, 0.4);
+    0 8px 40px rgba(212, 175, 55, 0.5),
+    0 0 80px rgba(212, 175, 55, 0.3);
   transform: scale(1.1) rotate(10deg);
 }
 
@@ -554,17 +615,17 @@ body {
   font-size: 1.8rem;
 }
 
-/* Chat Section - Right Side */
+/* Chat Section - Right Side with fade transitions */
 .chat-section {
   flex: 0 0 0%;
   opacity: 0;
   display: flex;
   flex-direction: column;
-  background: rgba(10, 10, 10, 0.98);
-  border-left: 2px solid rgba(96, 165, 250, 0.2);
+  background: rgba(0, 0, 0, 0.95);
+  border-left: 1px solid rgba(212, 175, 55, 0.2);
   position: relative;
   overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(100%);
 }
 
@@ -574,38 +635,55 @@ body {
   transform: translateX(0);
 }
 
-/* Chat Container */
+/* Fade in chat content after section appears */
 .chat-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.5), rgba(10, 10, 10, 0.8));
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.8), rgba(0, 0, 0, 0.9));
   position: relative;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.3s;
+}
+
+.App.chat-open .chat-container {
+  opacity: 1;
 }
 
 /* Chat Header */
 .chat-header {
   padding: 2rem;
-  border-bottom: 2px solid rgba(96, 165, 250, 0.2);
-  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(10, 10, 10, 0.5);
   backdrop-filter: blur(20px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease 0.5s;
+}
+
+.App.chat-open .chat-header {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .chat-header h3 {
   margin: 0;
-  color: #60a5fa;
   font-size: 1.8rem;
   font-weight: 700;
-  text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 1), rgba(192, 192, 192, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
 }
 
 .close-chat-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: rgba(212, 175, 55, 0.8);
   font-size: 2rem;
   cursor: pointer;
   width: 45px;
@@ -618,10 +696,11 @@ body {
 }
 
 .close-chat-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: white;
+  background: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.6);
+  color: rgba(212, 175, 55, 1);
   transform: rotate(90deg);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 /* Chat Messages */
@@ -632,29 +711,35 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.6s;
+}
+
+.App.chat-open .chat-messages {
+  opacity: 1;
 }
 
 .chat-messages::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(10, 10, 10, 0.5);
   border-radius: 10px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background: rgba(96, 165, 250, 0.4);
+  background: rgba(212, 175, 55, 0.3);
   border-radius: 10px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(96, 165, 250, 0.6);
+  background: rgba(212, 175, 55, 0.5);
 }
 
 .empty-chat {
   text-align: center;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(192, 192, 192, 0.4);
   font-size: 1.1rem;
   margin-top: 3rem;
   font-weight: 300;
@@ -696,37 +781,46 @@ body {
 }
 
 .message.user .message-content {
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
-  color: white;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   border-bottom-right-radius: 6px;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
 }
 
 .message.assistant .message-content {
-  background: rgba(139, 92, 246, 0.15);
-  color: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(192, 192, 192, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(192, 192, 192, 0.2);
   border-bottom-left-radius: 6px;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Chat Input */
 .chat-input-container {
   padding: 2rem;
-  border-top: 2px solid rgba(96, 165, 250, 0.2);
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
   display: flex;
   gap: 1rem;
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(10, 10, 10, 0.5);
   backdrop-filter: blur(20px);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease 0.7s;
+}
+
+.App.chat-open .chat-input-container {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .voice-btn {
   width: 50px;
   height: 50px;
-  background: rgba(52, 211, 153, 0.2);
-  border: 2px solid rgba(52, 211, 153, 0.5);
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 50%;
-  color: white;
+  color: rgba(212, 175, 55, 0.9);
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -736,24 +830,24 @@ body {
 }
 
 .voice-btn:hover:not(:disabled) {
-  background: rgba(52, 211, 153, 0.3);
-  border-color: rgba(52, 211, 153, 0.8);
-  box-shadow: 0 0 25px rgba(52, 211, 153, 0.5);
+  background: rgba(212, 175, 55, 0.25);
+  border-color: rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
   transform: scale(1.1);
 }
 
 .voice-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .chat-input {
   flex: 1;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 15px;
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
@@ -761,41 +855,43 @@ body {
 
 .chat-input:focus {
   outline: none;
-  border-color: rgba(96, 165, 250, 0.6);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(10, 10, 10, 0.8);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
 .chat-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(192, 192, 192, 0.4);
 }
 
 .chat-input:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .send-btn {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
-  border: none;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.3));
+  border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 15px;
-  color: white;
+  color: rgba(255, 255, 255, 0.95);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
 }
 
 .send-btn:hover:not(:disabled) {
-  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.4));
+  border-color: rgba(212, 175, 55, 0.8);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
   transform: translateY(-2px);
 }
 
 .send-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
   transform: none;
 }
@@ -836,10 +932,6 @@ body {
     height: 100px;
   }
 
-  .ai-container {
-    gap: 1.5rem;
-  }
-
   .state-label {
     font-size: 1.3rem;
   }
@@ -858,7 +950,7 @@ body {
 
   .chat-section {
     border-left: none;
-    border-top: 2px solid rgba(96, 165, 250, 0.2);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
     transform: translateY(100%);
   }
 
@@ -877,7 +969,6 @@ body {
 
   .chat-messages {
     padding: 1.5rem;
-    gap: 1rem;
   }
 
   .message-content {
